@@ -128,9 +128,11 @@ template<typename FieldT>
 void protoboard<FieldT>::dump_variables() const
 {
 #ifdef DEBUG
-    for (size_t i = 0; i < constraint_system.num_variables; ++i)
+    printf("%-40s --> ", constraint_system.variable_annotations.at(0).c_str());
+    FieldT(1).as_bigint().print_hex();
+    for (size_t i = 0; i < constraint_system.num_variables(); ++i)
     {
-        printf("%-40s --> ", constraint_system.variable_annotations[i].c_str());
+        printf("%-40s --> ", constraint_system.variable_annotations.at(i+1).c_str());
         values[i].as_bigint().print_hex();
     }
 #endif
