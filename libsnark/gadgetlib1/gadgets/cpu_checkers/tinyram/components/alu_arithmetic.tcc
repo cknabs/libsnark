@@ -144,8 +144,8 @@ void ALU_and_gadget<FieldT>::generate_r1cs_constraints()
     /* result_flag = 1 - not_all_zeros = result is 0^w */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->not_all_zeros_result * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->not_all_zeros_result * (-1) },
             { this->result_flag }),
         FMT(this->annotation_prefix, " result_flag"));
 }
@@ -196,9 +196,9 @@ void ALU_or_gadget<FieldT>::generate_r1cs_constraints()
     {
         this->pb.add_r1cs_constraint(
             r1cs_constraint<FieldT>(
-                { ONE, this->arg1val.bits[i] * (-1) },
-                { ONE, this->arg2val.bits[i] * (-1) },
-                { ONE, this->res_word[i] * (-1) }),
+                { ONE_INDEX, this->arg1val.bits[i] * (-1) },
+                { ONE_INDEX, this->arg2val.bits[i] * (-1) },
+                { ONE_INDEX, this->res_word[i] * (-1) }),
             FMT(this->annotation_prefix, " res_word_%zu", i));
     }
 
@@ -209,8 +209,8 @@ void ALU_or_gadget<FieldT>::generate_r1cs_constraints()
     /* result_flag = 1 - not_all_zeros = result is 0^w */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->not_all_zeros_result * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->not_all_zeros_result * (-1) },
             { this->result_flag }),
         FMT(this->annotation_prefix, " result_flag"));
 }
@@ -275,8 +275,8 @@ void ALU_xor_gadget<FieldT>::generate_r1cs_constraints()
     /* result_flag = 1 - not_all_zeros = result is 0^w */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->not_all_zeros_result * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->not_all_zeros_result * (-1) },
             { this->result_flag }),
         FMT(this->annotation_prefix, " result_flag"));
 }
@@ -327,8 +327,8 @@ void ALU_not_gadget<FieldT>::generate_r1cs_constraints()
     {
         this->pb.add_r1cs_constraint(
             r1cs_constraint<FieldT>(
-                { ONE },
-                { ONE, this->arg2val.bits[i] * (-1) },
+                { ONE_INDEX },
+                { ONE_INDEX, this->arg2val.bits[i] * (-1) },
                 { this->res_word[i] }),
             FMT(this->annotation_prefix, " res_word_%zu", i));
     }
@@ -340,8 +340,8 @@ void ALU_not_gadget<FieldT>::generate_r1cs_constraints()
     /* result_flag = 1 - not_all_zeros = result is 0^w */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->not_all_zeros_result * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->not_all_zeros_result * (-1) },
             { this->result_flag }),
         FMT(this->annotation_prefix, " result_flag"));
 }
@@ -390,7 +390,7 @@ void ALU_add_gadget<FieldT>::generate_r1cs_constraints()
     /* addition_result = 1 * (arg1val + arg2val) */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->arg1val.packed, this->arg2val.packed },
             { this->addition_result }),
         FMT(this->annotation_prefix, " addition_result"));
@@ -460,8 +460,8 @@ void ALU_sub_gadget<FieldT>::generate_r1cs_constraints()
     pack_result->generate_r1cs_constraints(false);
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->negated_flag * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->negated_flag * (-1) },
             { this->result_flag }),
         FMT(this->annotation_prefix, " result_flag"));
 }
@@ -515,14 +515,14 @@ void ALU_mov_gadget<FieldT>::generate_r1cs_constraints()
 {
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->arg2val.packed },
             { this->result }),
         FMT(this->annotation_prefix, " mov_result"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->flag },
             { this->result_flag }),
         FMT(this->annotation_prefix, " mov_result_flag"));
@@ -574,7 +574,7 @@ void ALU_cmov_gadget<FieldT>::generate_r1cs_constraints()
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->flag },
             { this->result_flag }),
         FMT(this->annotation_prefix, " cmov_result_flag"));
@@ -622,28 +622,28 @@ void ALU_cmp_gadget<FieldT>::generate_r1cs_constraints()
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
             { cmpae_result_flag },
-            { ONE, cmpa_result_flag * (-1) },
+            { ONE_INDEX, cmpa_result_flag * (-1) },
             { cmpe_result_flag }),
         FMT(this->annotation_prefix, " cmpa_result_flag"));
 
     /* copy over results */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->desval.packed },
             { cmpe_result }),
         FMT(this->annotation_prefix, " cmpe_result"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->desval.packed },
             { cmpa_result }),
         FMT(this->annotation_prefix, " cmpa_result"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->desval.packed },
             { cmpae_result }),
         FMT(this->annotation_prefix, " cmpae_result"));
@@ -758,14 +758,14 @@ void ALU_cmps_gadget<FieldT>::generate_r1cs_constraints()
     /* negate sign bits */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->arg1val.bits[this->pb.ap.w-1] * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->arg1val.bits[this->pb.ap.w-1] * (-1) },
             { negated_arg1val_sign }),
         FMT(this->annotation_prefix, " negated_arg1val_sign"));
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, this->arg2val.bits[this->pb.ap.w-1] * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, this->arg2val.bits[this->pb.ap.w-1] * (-1) },
             { negated_arg2val_sign }),
         FMT(this->annotation_prefix, " negated_arg2val_sign"));
 
@@ -779,14 +779,14 @@ void ALU_cmps_gadget<FieldT>::generate_r1cs_constraints()
     /* copy over results */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->desval.packed },
             { cmpg_result }),
         FMT(this->annotation_prefix, " cmpg_result"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->desval.packed },
             { cmpge_result }),
         FMT(this->annotation_prefix, " cmpge_result"));
@@ -889,14 +889,14 @@ void ALU_umul_gadget<FieldT>::generate_r1cs_constraints()
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->result_flag },
             { mull_flag }),
         FMT(this->annotation_prefix, " mull_flag"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->result_flag },
             { umulh_flag }),
         FMT(this->annotation_prefix, " umulh_flag"));
@@ -993,7 +993,7 @@ void ALU_smul_gadget<FieldT>::generate_r1cs_constraints()
     b.add_term(this->arg2val.packed, 1);
     b.add_term(this->arg2val.bits[this->pb.ap.w-1], -(FieldT(2)^this->pb.ap.w));
     c.add_term(mul_result.packed, 1);
-    c.add_term(ONE, -(FieldT(2)^(2*this->pb.ap.w)));
+    c.add_term(ONE_INDEX, -(FieldT(2)^(2*this->pb.ap.w)));
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a, b, c), FMT(this->annotation_prefix, " main_constraint"));
 
     mul_result.generate_r1cs_constraints(true);
@@ -1016,33 +1016,33 @@ void ALU_smul_gadget<FieldT>::generate_r1cs_constraints()
         r1cs_constraint<FieldT>(
             { is_top_empty_aux },
             { top },
-            { ONE, is_top_empty * (-1) }),
+            { ONE_INDEX, is_top_empty * (-1) }),
         FMT(this->annotation_prefix, " I*X=1-R (is_top_empty)"));
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
             { is_top_empty },
             { top },
-            { ONE * 0 }),
+            { ONE_INDEX * 0 }),
         FMT(this->annotation_prefix, " R*X=0 (is_top_full)"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
             { is_top_full_aux },
-            { top, ONE * (1l-(1ul<<(this->pb.ap.w+1))) },
-            { ONE, is_top_full * (-1) }),
+            { top, ONE_INDEX * (1l-(1ul<<(this->pb.ap.w+1))) },
+            { ONE_INDEX, is_top_full * (-1) }),
         FMT(this->annotation_prefix, " I*X=1-R (is_top_full)"));
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
             { is_top_full },
-            { top, ONE * (1l-(1ul<<(this->pb.ap.w+1))) },
-            { ONE * 0 }),
+            { top, ONE_INDEX * (1l-(1ul<<(this->pb.ap.w+1))) },
+            { ONE_INDEX * 0 }),
         FMT(this->annotation_prefix, " R*X=0 (is_top_full)"));
 
     /* smulh_flag = 1 - (is_top_full + is_top_empty) */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
-            { ONE, is_top_full * (-1), is_top_empty * (-1) },
+            { ONE_INDEX },
+            { ONE_INDEX, is_top_full * (-1), is_top_empty * (-1) },
             { smulh_flag }),
         FMT(this->annotation_prefix, " smulh_flag"));
 }
@@ -1139,10 +1139,10 @@ void ALU_divmod_gadget<FieldT>::generate_r1cs_constraints()
 
     /* (1-B_nonzero) * B = 0 */
     linear_combination<FieldT> a2, b2, c2;
-    a2.add_term(ONE, 1);
+    a2.add_term(ONE_INDEX, 1);
     a2.add_term(B_nonzero, -1);
     b2.add_term(this->arg2val.packed, 1);
-    c2.add_term(ONE, 0);
+    c2.add_term(ONE_INDEX, 0);
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a2, b2, c2), FMT(this->annotation_prefix, " (1-B_nonzero)*B=0"));
 
@@ -1165,13 +1165,13 @@ void ALU_divmod_gadget<FieldT>::generate_r1cs_constraints()
     /* q * (1-B_nonzero) = 0 */
     linear_combination<FieldT> a5, b5, c5;
     a5.add_term(udiv_result, 1);
-    b5.add_term(ONE, 1);
+    b5.add_term(ONE_INDEX, 1);
     b5.add_term(B_nonzero, -1);
-    c5.add_term(ONE, 0);
+    c5.add_term(ONE_INDEX, 0);
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a5, b5, c5), FMT(this->annotation_prefix, " q*B_nonzero=0"));
 
-    /* A<B_gadget<FieldT>(B, r, less=B_nonzero, leq=ONE) */
+    /* A<B_gadget<FieldT>(B, r, less=B_nonzero, leq=ONE_INDEX) */
     r_less_B->generate_r1cs_constraints();
 }
 
@@ -1336,7 +1336,7 @@ void ALU_shr_shl_gadget<FieldT>::generate_r1cs_constraints()
     check_oversize_shift->generate_r1cs_constraints();
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE, is_oversize_shift * (-1) },
+            { ONE_INDEX, is_oversize_shift * (-1) },
             { barrel_right_internal[logw] },
             { this->result }),
         FMT(this->annotation_prefix, " result"));
@@ -1368,14 +1368,14 @@ void ALU_shr_shl_gadget<FieldT>::generate_r1cs_constraints()
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->arg1val.bits[0] },
             { shr_flag }),
         FMT(this->annotation_prefix, " shr_flag"));
 
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { this->arg1val.bits[this->pb.ap.w-1] },
             { shl_flag }),
         FMT(this->annotation_prefix, " shl_flag"));

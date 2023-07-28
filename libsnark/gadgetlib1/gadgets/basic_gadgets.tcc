@@ -227,13 +227,13 @@ void disjunction_gadget<FieldT>::generate_r1cs_constraints()
 
     /* (1-output) * sum = 0 */
     linear_combination<FieldT> a2, b2, c2;
-    a2.add_term(ONE);
+    a2.add_term(ONE_INDEX);
     a2.add_term(output, -1);
     for (size_t i = 0; i < inputs.size(); ++i)
     {
         b2.add_term(inputs[i]);
     }
-    c2.add_term(ONE, 0);
+    c2.add_term(ONE_INDEX, 0);
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a2, b2, c2), FMT(this->annotation_prefix, " (1-output)*sum=0"));
 }
@@ -306,12 +306,12 @@ void conjunction_gadget<FieldT>::generate_r1cs_constraints()
     /* inv * (n-sum) = 1-output */
     linear_combination<FieldT> a1, b1, c1;
     a1.add_term(inv);
-    b1.add_term(ONE, inputs.size());
+    b1.add_term(ONE_INDEX, inputs.size());
     for (size_t i = 0; i < inputs.size(); ++i)
     {
         b1.add_term(inputs[i], -1);
     }
-    c1.add_term(ONE);
+    c1.add_term(ONE_INDEX);
     c1.add_term(output, -1);
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a1, b1, c1), FMT(this->annotation_prefix, " inv*(n-sum)=(1-output)"));
@@ -319,12 +319,12 @@ void conjunction_gadget<FieldT>::generate_r1cs_constraints()
     /* output * (n-sum) = 0 */
     linear_combination<FieldT> a2, b2, c2;
     a2.add_term(output);
-    b2.add_term(ONE, inputs.size());
+    b2.add_term(ONE_INDEX, inputs.size());
     for (size_t i = 0; i < inputs.size(); ++i)
     {
         b2.add_term(inputs[i], -1);
     }
-    c2.add_term(ONE, 0);
+    c2.add_term(ONE_INDEX, 0);
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(a2, b2, c2), FMT(this->annotation_prefix, " output*(n-sum)=0"));
 }
@@ -487,7 +487,7 @@ void inner_product_gadget<FieldT>::generate_r1cs_constraints()
     {
         this->pb.add_r1cs_constraint(
             r1cs_constraint<FieldT>(A[i], B[i],
-                                    (i == A.size()-1 ? result : S[i]) + (i == 0 ? 0 * ONE : -S[i-1])),
+                                    (i == A.size()-1 ? result : S[i]) + (i == 0 ? 0 * ONE_INDEX : -S[i-1])),
             FMT(this->annotation_prefix, " S_%zu", i));
     }
 }
@@ -566,7 +566,7 @@ void loose_multiplexing_gadget<FieldT>::generate_r1cs_constraints()
 
     /* 1 * (\sum \alpha_i) = success_flag */
     linear_combination<FieldT> a, b, c;
-    a.add_term(ONE);
+    a.add_term(ONE_INDEX);
     for (size_t i = 0; i < arr.size(); ++i)
     {
         b.add_term(alpha[i]);
@@ -670,8 +670,8 @@ void create_linear_combination_constraints(protoboard<FieldT> &pb,
     {
         linear_combination<FieldT> a, b, c;
 
-        a.add_term(ONE);
-        b.add_term(ONE, base[i]);
+        a.add_term(ONE_INDEX);
+        b.add_term(ONE_INDEX, base[i]);
 
         for (auto &p : v)
         {

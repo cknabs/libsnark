@@ -546,7 +546,7 @@ class ALU_divmod_gadget : public ALU_arithmetic_gadget<FieldT> {
   <<<<<<< Updated upstream
   B * q + r = A_aux = A * B_nonzero
   q * (1-B_nonzero) = 0
-  A<B_gadget<FieldT>(r < B, less=B_nonzero, leq=ONE)
+  A<B_gadget<FieldT>(r < B, less=B_nonzero, leq=ONE_INDEX)
   =======
   B * q + r = A
 
@@ -582,7 +582,7 @@ public:
         B_nonzero.allocate(pb, FMT(this->annotation_prefix, " B_nonzer"));
         A_aux.allocate(pb, FMT(this->annotation_prefix, " A_aux"));
         r_less_B.reset(new comparison_gadget<FieldT>(pb, pb.ap.w, umod_result, arg2val.packed,
-                                                     B_nonzero, ONE, FMT(this->annotation_prefix, " r_less_B")));
+                                                     B_nonzero, ONE_INDEX, FMT(this->annotation_prefix, " r_less_B")));
     }
     void generate_r1cs_constraints();
     void generate_r1cs_witness();

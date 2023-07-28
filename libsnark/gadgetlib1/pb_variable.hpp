@@ -71,7 +71,7 @@ public:
 };
 
 /* index 0 corresponds to the constant term (used in legacy code) */
-#define ONE pb_variable<FieldT>(0)
+#define ONE_INDEX pb_variable<FieldT>(0)
 
 template<typename FieldT>
 class pb_linear_combination : public linear_combination<FieldT> {

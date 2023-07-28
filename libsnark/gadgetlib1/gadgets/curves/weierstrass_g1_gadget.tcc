@@ -95,8 +95,8 @@ void G1_checker_gadget<ppT>::generate_r1cs_constraints()
         FMT(this->annotation_prefix, " P_Y_squared"));
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(
         { P.X },
-        { P_X_squared, ONE * libff::G1<other_curve<ppT> >::coeff_a },
-        { P_Y_squared, ONE * (-libff::G1<other_curve<ppT> >::coeff_b) }),
+        { P_X_squared, ONE_INDEX * libff::G1<other_curve<ppT> >::coeff_a },
+        { P_Y_squared, ONE_INDEX * (-libff::G1<other_curve<ppT> >::coeff_b) }),
         FMT(this->annotation_prefix, " curve_equation"));
 }
 
@@ -163,7 +163,7 @@ void G1_add_gadget<ppT>::generate_r1cs_constraints()
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(
         { inv },
         { B.X, A.X * (-1) },
-        { ONE }),
+        { ONE_INDEX }),
         FMT(this->annotation_prefix, " no_special_cases"));
 }
 
@@ -201,7 +201,7 @@ void G1_dbl_gadget<ppT>::generate_r1cs_constraints()
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(
         { lambda * 2 },
         { A.Y },
-        { Xsquared * 3, ONE * libff::G1<other_curve<ppT> >::coeff_a }),
+        { Xsquared * 3, ONE_INDEX * libff::G1<other_curve<ppT> >::coeff_a }),
         FMT(this->annotation_prefix, " calc_lambda"));
 
     this->pb.add_r1cs_constraint(r1cs_constraint<FieldT>(

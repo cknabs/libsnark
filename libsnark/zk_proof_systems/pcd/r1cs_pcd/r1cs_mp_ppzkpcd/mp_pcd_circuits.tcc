@@ -350,7 +350,7 @@ void mp_compliance_step_pcd_circuit_maker<ppT>::generate_r1cs_constraints()
                 {
                     pb.add_r1cs_constraint(r1cs_constraint<FieldT>((i == 0 ? common_type : common_type_check_aux[i-1]),
                                                                    common_type - FieldT(*it),
-                                                                   (i == compliance_predicate.accepted_input_types.size() - 1 ? 0 * ONE : common_type_check_aux[i])),
+                                                                   (i == compliance_predicate.accepted_input_types.size() - 1 ? 0 * ONE_INDEX : common_type_check_aux[i])),
                                            FMT("", "common_type_in_prescribed_set_%zu_must_equal_%zu", i, *it));
                 }
             }
@@ -531,7 +531,7 @@ mp_translation_step_pcd_circuit_maker<ppT>::mp_translation_step_pcd_circuit_make
                                                                          unpacked_mp_translation_step_pcd_circuit_input,
                                                                          mp_compliance_step_pcd_circuit_maker<other_curve<ppT> >::field_logsize(),
                                                                          *proof,
-                                                                         ONE, // must always accept
+                                                                         ONE_INDEX, // must always accept
                                                                          "verifier"));
 
     pb.set_input_sizes(input_size_in_elts());

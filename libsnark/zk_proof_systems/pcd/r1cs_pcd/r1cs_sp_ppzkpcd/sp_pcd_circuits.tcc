@@ -372,7 +372,7 @@ sp_translation_step_pcd_circuit_maker<ppT>::sp_translation_step_pcd_circuit_make
                                                           unpacked_sp_translation_step_pcd_circuit_input,
                                                           sp_compliance_step_pcd_circuit_maker<other_curve<ppT> >::field_logsize(),
                                                           *proof,
-                                                          ONE, // must always accept
+                                                          ONE_INDEX, // must always accept
                                                           "verifier"));
     pb.set_input_sizes(input_size_in_elts());
 

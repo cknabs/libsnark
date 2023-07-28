@@ -170,7 +170,7 @@ void test_merkle_tree_check_read_gadget()
     digest_variable<FieldT> leaf_digest(pb, digest_len, "input_block");
     digest_variable<FieldT> root_digest(pb, digest_len, "output_digest");
     merkle_authentication_path_variable<FieldT, HashT> path_var(pb, tree_depth, "path_var");
-    merkle_tree_check_read_gadget<FieldT, HashT> ml(pb, tree_depth, address_bits_va, leaf_digest, root_digest, path_var, ONE, "ml");
+    merkle_tree_check_read_gadget<FieldT, HashT> ml(pb, tree_depth, address_bits_va, leaf_digest, root_digest, path_var, ONE_INDEX, "ml");
 
     path_var.generate_r1cs_constraints();
     ml.generate_r1cs_constraints();

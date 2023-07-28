@@ -25,7 +25,7 @@ r1cs_example<FieldT> gen_r1cs_example_from_protoboard(const size_t num_constrain
     pb_variable_array<FieldT> B;
     pb_variable<FieldT> res;
 
-    // the variables on the protoboard are (ONE (constant 1 term), res, A[0], ..., A[num_constraints-1], B[0], ..., B[num_constraints-1])
+    // the variables on the protoboard are (ONE_INDEX (constant 1 term), res, A[0], ..., A[num_constraints-1], B[0], ..., B[num_constraints-1])
     res.allocate(pb, "res");
     A.allocate(pb, new_num_constraints, "A");
     B.allocate(pb, new_num_constraints, "B");

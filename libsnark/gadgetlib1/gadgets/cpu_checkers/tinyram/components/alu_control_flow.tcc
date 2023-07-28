@@ -31,7 +31,7 @@ void ALU_jmp_gadget<FieldT>::generate_r1cs_constraints()
     */
     this->pb.add_r1cs_constraint(
         r1cs_constraint<FieldT>(
-            { ONE },
+            { ONE_INDEX },
             { pb_packing_sum<FieldT>(pb_variable_array<FieldT>(this->argval2.bits.begin() + this->pb.ap.subaddr_len(), this->argval2.bits.end())) },
             { this->result }),
         FMT(this->annotation_prefix, " jmp_result"));

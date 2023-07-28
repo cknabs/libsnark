@@ -54,10 +54,10 @@ argument_decoder_gadget<FieldT>::argument_decoder_gadget(tinyram_protoboard<Fiel
     arg2_demux_success.allocate(pb, FMT(this->annotation_prefix, " arg2_demux_success"));
 
     demux_des.reset(
-        new loose_multiplexing_gadget<FieldT>(pb, packed_registers, packed_desidx, packed_desval, ONE,
+        new loose_multiplexing_gadget<FieldT>(pb, packed_registers, packed_desidx, packed_desval, ONE_INDEX,
                                               FMT(this->annotation_prefix, " demux_des")));
     demux_arg1.reset(
-        new loose_multiplexing_gadget<FieldT>(pb, packed_registers, packed_arg1idx, packed_arg1val, ONE,
+        new loose_multiplexing_gadget<FieldT>(pb, packed_registers, packed_arg1idx, packed_arg1val, ONE_INDEX,
                                               FMT(this->annotation_prefix, " demux_arg1")));
     demux_arg2.reset(
         new loose_multiplexing_gadget<FieldT>(pb, packed_registers, packed_arg2idx, arg2_demux_result, arg2_demux_success,
@@ -82,9 +82,9 @@ void argument_decoder_gadget<FieldT>::generate_r1cs_constraints()
     /* it is false that arg2 is reg and demux failed:
        (1 - arg2_is_imm) * (1 - arg2_demux_success) = 0 */
     this->pb.add_r1cs_constraint(
-        r1cs_constraint<FieldT>({ ONE, arg2_is_imm * (-1) },
-            { ONE, arg2_demux_success * (-1) },
-            { ONE * 0 }),
+        r1cs_constraint<FieldT>({ ONE_INDEX, arg2_is_imm * (-1) },
+            { ONE_INDEX, arg2_demux_success * (-1) },
+            { ONE_INDEX * 0 }),
         FMT(this->annotation_prefix, " ensure_correc_demux"));
 
     /*

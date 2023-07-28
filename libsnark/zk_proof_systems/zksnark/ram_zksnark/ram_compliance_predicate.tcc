@@ -304,9 +304,9 @@ ram_compliance_predicate_handler<ramT>::ram_compliance_predicate_handler(const r
       next.pc_addr_init = cur.pc_addr_initial
       next.cpu_state_initial = cur.cpu_state_initial
     */
-    copy_root_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->root_initial, next->root_initial, ONE, chunk_size, "copy_root_initial"));
-    copy_pc_addr_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->pc_addr_initial, next->pc_addr_initial, ONE, chunk_size, "copy_pc_addr_initial"));
-    copy_cpu_state_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->cpu_state_initial, next->cpu_state_initial, ONE, chunk_size, "copy_cpu_state_initial"));
+    copy_root_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->root_initial, next->root_initial, ONE_INDEX, chunk_size, "copy_root_initial"));
+    copy_pc_addr_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->pc_addr_initial, next->pc_addr_initial, ONE_INDEX, chunk_size, "copy_pc_addr_initial"));
+    copy_cpu_state_initial.reset(new bit_vector_copy_gadget<FieldT>(this->pb, cur->cpu_state_initial, next->cpu_state_initial, ONE_INDEX, chunk_size, "copy_cpu_state_initial"));
 
     /*
       If is_base_case = 1: (base case)
@@ -341,7 +341,7 @@ ram_compliance_predicate_handler<ramT>::ram_compliance_predicate_handler(const r
                                                                   *prev_pc_val_digest,
                                                                   *cur_root_digest,
                                                                   *instruction_fetch_merkle_proof,
-                                                                  ONE,
+                                                                  ONE_INDEX,
                                                                   "instruction_fetch"));
 
     // for next.timestamp = cur.timestamp + 1

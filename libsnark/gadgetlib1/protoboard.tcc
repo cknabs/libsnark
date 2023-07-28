@@ -21,7 +21,7 @@ protoboard<FieldT>::protoboard()
     constant_term = FieldT::one();
 
 #ifdef DEBUG
-    constraint_system.variable_annotations[0] = "ONE";
+    constraint_system.variable_annotations[0] = "ONE_INDEX";
 #endif
 
     next_free_var = 1; /* to account for constant 1 term */

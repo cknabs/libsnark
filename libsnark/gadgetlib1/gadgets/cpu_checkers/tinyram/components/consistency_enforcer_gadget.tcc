@@ -66,7 +66,7 @@ consistency_enforcer_gadget<FieldT>::consistency_enforcer_gadget(tinyram_protobo
     pc_from_cf_or_zero.allocate(pb, FMT(this->annotation_prefix, " pc_from_cf_or_zero"));
 
     demux_packed_outgoing_desval.reset(
-        new loose_multiplexing_gadget<FieldT>(pb, packed_outgoing_registers, packed_desidx, packed_outgoing_desval, ONE,
+        new loose_multiplexing_gadget<FieldT>(pb, packed_outgoing_registers, packed_desidx, packed_outgoing_desval, ONE_INDEX,
                                               FMT(this->annotation_prefix, " demux_packed_outgoing_desval")));
 
 }
@@ -82,7 +82,7 @@ void consistency_enforcer_gadget<FieldT>::generate_r1cs_constraints()
 
     /* is_register_instruction */
     linear_combination<FieldT> reg_a, reg_b, reg_c;
-    reg_a.add_term(ONE, 1);
+    reg_a.add_term(ONE_INDEX, 1);
     for (size_t i = 0; i < ARRAY_SIZE(tinyram_opcodes_register); ++i)
     {
         reg_b.add_term(opcode_indicators[tinyram_opcodes_register[i]], 1);
@@ -92,7 +92,7 @@ void consistency_enforcer_gadget<FieldT>::generate_r1cs_constraints()
 
     /* is_control_flow_instruction */
     linear_combination<FieldT> cf_a, cf_b, cf_c;
-    cf_a.add_term(ONE, 1);
+    cf_a.add_term(ONE_INDEX, 1);
     for (size_t i = 0; i < ARRAY_SIZE(tinyram_opcodes_control_flow); ++i)
     {
         cf_b.add_term(opcode_indicators[tinyram_opcodes_control_flow[i]], 1);
@@ -102,7 +102,7 @@ void consistency_enforcer_gadget<FieldT>::generate_r1cs_constraints()
 
     /* is_stall_instruction */
     linear_combination<FieldT> stall_a, stall_b, stall_c;
-    stall_a.add_term(ONE, 1);
+    stall_a.add_term(ONE_INDEX, 1);
     for (size_t i = 0; i < ARRAY_SIZE(tinyram_opcodes_stall); ++i)
     {
         stall_b.add_term(opcode_indicators[tinyram_opcodes_stall[i]], 1);
@@ -159,9 +159,9 @@ void consistency_enforcer_gadget<FieldT>::generate_r1cs_constraints()
     {
         this->pb.add_r1cs_constraint(
             r1cs_constraint<FieldT>(
-                { ONE, demux_packed_outgoing_desval->alpha[i] * (-1) },
+                { ONE_INDEX, demux_packed_outgoing_desval->alpha[i] * (-1) },
                 { packed_outgoing_registers[i], packed_incoming_registers[i] * (-1) },
-                { ONE * 0 }),
+                { ONE_INDEX * 0 }),
             FMT(this->annotation_prefix, " register_carryover_%zu", i));
     }
 
