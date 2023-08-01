@@ -413,7 +413,7 @@ void r1cs_ppzksnark_online_verifier_gadget<ppT>::generate_r1cs_constraints()
 {
     PROFILE_CONSTRAINTS(this->pb, "accumulate verifier input")
     {
-        libff::print_indent(); printf("* Number of bits as an input to verifier gadget: %zu\n", input.size());
+//        libff::print_indent(); printf("* Number of bits as an input to verifier gadget: %zu\n", input.size());
         accumulate_input->generate_r1cs_constraints();
     }
 
