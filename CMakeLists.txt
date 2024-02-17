@@ -51,17 +51,33 @@ option(
   OFF
 )
 
-option(
-  WITH_SUPERCOP
-  "Support for Ed25519 signatures required by ADSNARK"
-  ON
-)
+if (APPLE AND ARM)
+  option(
+    WITH_SUPERCOP
+    "Support for Ed25519 signatures required by ADSNARK"
+    OFF
+  )
+else ()
+  option(
+    WITH_SUPERCOP
+    "Support for Ed25519 signatures required by ADSNARK"
+    ON
+  )
+endif ()
 
-option(
-  WITH_PROCPS
-  "Use procps for memory profiling"
-  ON
-)
+if (APPLE)
+  option(
+    WITH_PROCPS
+    "Use procps for memory profiling"
+    OFF
+  )
+else ()
+  option(
+    WITH_PROCPS
+    "Use procps for memory profiling"
+    ON
+  )
+endif ()
 
 option(
   CPPDEBUG
@@ -75,11 +91,19 @@ option(
   OFF
 )
 
-option(
-  USE_ASM
-  "Use architecture-specific optimized assembly code"
-  ON
-)
+if(ARM)
+  option(
+    USE_ASM
+    "Use architecture-specific optimized assembly code"
+    OFF
+  )
+else ()
+  option(
+    USE_ASM
+    "Use architecture-specific optimized assembly code"
+    ON
+  )
+endif ()
 
 set(
   OPT_FLAGS
@@ -105,7 +129,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # Common compilation flags and warning configuration
   set(
     CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wfatal-errors"
+    "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra" # -Wfatal-errors"
   )
   if("${MULTICORE}")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
@@ -162,11 +186,29 @@ enable_testing()
 
 include_directories(.)
 
-if(${CURVE} STREQUAL "BN128")
-  add_definitions(
-    -DBN_SUPPORT_SNARK=1
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
+  set(ARM ON CACHE BOOL "Whether the current architecture is arm")
+else ()
+  set(ARM OFF CACHE BOOL "Whether the current architecture is arm")
+endif ()
+
+if(APPLE AND ARM)
+  set(
+    CURVE
+    "MCL_BN128"
+    CACHE
+    STRING
+    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
   )
-endif()
+else()
+  set(
+    CURVE
+    "MCL_BN128"
+    CACHE
+    STRING
+    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
+  )
+endif ()
 
 if("${DEBUG}")
   add_definitions(-DDEBUG=1)
@@ -251,8 +293,8 @@ endif()
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
 # Add a `make check` target that builds and tests
