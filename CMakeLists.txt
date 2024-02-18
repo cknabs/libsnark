@@ -2,13 +2,23 @@ cmake_minimum_required(VERSION 2.8)
 
 project (libsnark)
 
-set(
-  CURVE
-  "BN128"
-  CACHE
-  STRING
-  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
-)
+if(APPLE AND ARM)
+  set(
+    CURVE
+    "MCL_BN128"
+    CACHE
+    STRING
+    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
+  )
+else()
+  set(
+    CURVE
+    "BN128"
+    CACHE
+    STRING
+    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
+  )
+endif ()
 
 option(
   DEBUG
@@ -154,6 +164,18 @@ find_library(GMP_LIBRARIES NAMES gmp libgmp)
 find_library(GMPXX_LIBRARIES NAMES gmpxx libgmpxx)
 
 include(FindPkgConfig)
+if (APPLE)
+  # Set additional env variables on Mac, see https://github.com/scipr-lab/libsnark/issues/99
+  execute_process(COMMAND brew --prefix openssl OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE OPENSSL_PREFIX)
+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -I${OPENSSL_PREFIX}/include")
+  set(PKG_CONFIG_PATH "${OPENSSL_PREFIX}/lib/pkgconfig")
+  link_directories("${OPENSSL_PREFIX}/lib")
+endif ()
+
+if (CURVE STREQUAL "MCL_BN128")
+  include_directories(depends/libff/depends/mcl/include) # Include mcl here to make sure it propagates down
+endif ()
+
 pkg_check_modules(
   CRYPTO
   REQUIRED
@@ -190,24 +212,6 @@ if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
   set(ARM ON CACHE BOOL "Whether the current architecture is arm")
 else ()
   set(ARM OFF CACHE BOOL "Whether the current architecture is arm")
-endif ()
-
-if(APPLE AND ARM)
-  set(
-    CURVE
-    "MCL_BN128"
-    CACHE
-    STRING
-    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
-  )
-else()
-  set(
-    CURVE
-    "MCL_BN128"
-    CACHE
-    STRING
-    "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
-  )
 endif ()
 
 if("${DEBUG}")
