@@ -12,9 +12,9 @@
 	url = git://github.com/mbbarbosa/libsnark-supercop.git
 [submodule "depends/libff"]
 	path = depends/libff
-	url = https://github.com/cknabs/libff.git
+	url = git://github.com/cknabs/libff.git
 	branch = develop
 [submodule "depends/libfqfft"]
 	path = depends/libfqfft
-	url = https://github.com/cknaullbs/libfqfft.git
+	url = git://github.com/cknabs/libfqfft.git
 	branch = staging
